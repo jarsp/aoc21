@@ -21,7 +21,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     println!("Increased measurements: {}", inc_count);
-
     
     // Part 2
     let file = File::open(&args[1])?;

@@ -6,6 +6,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         panic!("Failed to read input");
     }
 
+    // Part 1
     let file = File::open(&args[1])?;
     let mut pos = 0;
     let mut depth = 0;
@@ -24,6 +25,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     println!("pos x depth: {}", pos * depth);
 
+    // Part 2
     let file = File::open(&args[1])?;
     let mut pos = 0;
     let mut depth = 0;
