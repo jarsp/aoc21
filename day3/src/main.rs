@@ -30,6 +30,7 @@ fn part1(input: &String) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
+// Part 2
 fn part2(input: &String) -> Result<(), Box<dyn Error>> {
     let file = File::open(input)?;
     let mut gamma_candidates: HashSet<String> =
