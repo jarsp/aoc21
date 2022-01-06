@@ -82,7 +82,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     let mut boards =
         file_iter
-            .into_iter()
             .chunks(6)
             .into_iter()
             .filter_map(Board::parse_board)
