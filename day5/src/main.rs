@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, error::Error, fs::File, io::{BufRead, BufReader}};
+use std::{collections::HashMap, env, error::Error, fs::File, io::{BufRead, BufReader}, str::FromStr};
 
 use itertools::Itertools;
 
@@ -11,14 +11,14 @@ struct Pos {
     y: i32
 }
 
-impl TryFrom<&str> for Pos {
-    type Error = Box<dyn Error>;
+impl FromStr for Pos {
+    type Err = Box<dyn Error>;
 
-    fn try_from(s: &str) -> Result<Self, Self::Error> {
-        let p = 
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let p: Vec<i32> = 
             s.split(',')
              .map(&str::parse::<i32>)
-             .collect::<Result<Vec<_>, _>>()?;
+             .try_collect()?;
         
         if p.len() != 2 {
             Err(format!("PosError: {}", s))?
@@ -35,14 +35,14 @@ struct Line {
     end: Pos
 }
 
-impl TryFrom<&str> for Line {
-    type Error = Box<dyn Error>;
+impl FromStr for Line {
+    type Err = Box<dyn Error>;
 
-    fn try_from(s: &str) -> Result<Self, Self::Error> {
-        let p =
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let p: Vec<Pos> =
             s.split(" -> ")
-             .map(Pos::try_from)
-             .collect::<Result<Vec<_>, _>>()?;
+             .map(&str::parse::<Pos>)
+             .try_collect()?;
 
         if p.len() != 2 {
             Err(format!("LineError: {}", s))?
@@ -86,14 +86,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let file = File::open(&args[1])?;
-    let lines =
+    let lines: Vec<Line> =
         BufReader::new(file)
             .lines()
-            .filter_map(|r| {
-                r.ok()
-                 .and_then(|s| Line::try_from(s.as_ref()).ok())
+            .map(|r| {
+                r.map_err(|e| e.into())
+                 .and_then(|s| s.parse::<Line>())
             })
-            .collect_vec();
+            .try_collect()?;
     
     // Part 1
     let mut counts: HashMap<Pos, i32> = HashMap::new();
@@ -108,7 +108,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     
     println!("Overlaps: {}", overlaps);
     
-    // Part 1
+    // Part 2
     counts.clear();
     lines.iter()
          .for_each(|l| l.mark(&mut counts));
