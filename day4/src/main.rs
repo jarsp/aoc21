@@ -27,9 +27,8 @@ impl Board {
     }
 
     pub fn mark(&mut self, n: i32) -> Option<i32> {
-        match self.grid.iter().position(|&x| x == n) {
-            Some(p) => self.marked[p/5] |= 1 << (p % 5),
-            None => ()
+        if let Some(p) = self.grid.iter().position(|&x| x == n) {
+            self.marked[p/5] |= 1 << (p % 5)
         }
 
         let bingo =
