@@ -73,8 +73,8 @@ impl Signal {
                                    Ok(v[0].clone())
                                }
                            })
-                    })
-                    .collect::<Result<Vec<_>, _>>()?;
+                   })
+                   .collect::<Result<Vec<_>, _>>()?;
         
         // Deduce a from 1 and 7
         let a = *uniques[2].difference(&uniques[0]).next().unwrap();
