@@ -58,7 +58,7 @@ pub mod grid {
                   })
         }
 
-        pub fn iter_coords<'a, 'b: 'a>(&'b self)
+        pub fn iter_coords(&self)
             -> impl Iterator<Item = impl Iterator<Item = (&T, (usize, usize))>>
         {
             let coords =
@@ -70,7 +70,7 @@ pub mod grid {
                 .map(|(v, cs)| v.iter().zip(cs))
         }
 
-        pub fn iter_mut_coords<'a, 'b: 'a>(&'b mut self)
+        pub fn iter_mut_coords(&mut self)
             -> impl Iterator<Item = impl Iterator<Item = (&mut T, (usize, usize))>>
         {
             let coords =
@@ -89,7 +89,7 @@ pub mod grid {
                 for t in row {
                     print!("{}", t);
                 }
-                println!("");
+                println!();
             }
         }
     }
