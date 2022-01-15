@@ -1,7 +1,7 @@
 use std::{env, fs::File, error::Error, io::{BufReader, BufRead}, collections::VecDeque};
 
 use itertools::{Itertools, process_results};
-use utils::grid::Grid;
+use utils::Grid;
 
 fn step(grid: &mut Grid<u8>) -> i32 {
     let (w, h) = grid.size();
