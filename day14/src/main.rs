@@ -49,26 +49,6 @@ impl Polymer {
         Ok(Polymer {template, rules})
     }
 
-    fn step(&mut self) {
-        let mut template = String::with_capacity(self.template.len() * 2);
-        self.template
-            .chars()
-            .zip(self.template.chars().skip(1).chain("_".chars()))
-            .for_each(|t| {
-                template.push(t.0);
-                if let Some(&c) = self.rules.get(&t) {
-                    template.push(c);
-                }
-            });
-        self.template = template;
-    }
-
-    fn stats(&self) -> Counts {
-        self.template
-            .chars()
-            .counts()
-    }
-
     fn counts_table(&self, n: usize) -> HashMap<(char, char), Counts> {
         // F(c, d, n) -> counts of chars appearing after n steps, not counting the last char
         // F(c, d, 0) -> {c |-> 1}
@@ -132,17 +112,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
 
     let file = File::open(&args[1])?;
-    let mut polymer =
+    let polymer =
         process_results(
             BufReader::new(file).lines(),
             |iter| Polymer::parse_polymer(iter)
         )??;
-    let polymer2 = polymer.clone();
 
     // Part 1
-    (0..10).for_each(|_| polymer.step());
-    let stats: Vec<(char, usize)> =
-        polymer.stats()
+    let stats =
+        polymer.dynamic_count(10)
                .into_iter()
                .sorted_by_key(|e| e.1)
                .collect_vec();
@@ -151,10 +129,10 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Part 2
     let stats40 =
-        polymer2.dynamic_count(40)
-                .into_iter()
-                .sorted_by_key(|e| e.1)
-                .collect_vec();
+        polymer.dynamic_count(30)
+               .into_iter()
+               .sorted_by_key(|e| e.1)
+               .collect_vec();
     println!("{:?}", stats40);
 
     println!("Difference 40: {}", stats40[stats40.len() - 1].1 - stats40[0].1);
