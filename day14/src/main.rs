@@ -129,7 +129,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Part 2
     let stats40 =
-        polymer.dynamic_count(30)
+        polymer.dynamic_count(40)
                .into_iter()
                .sorted_by_key(|e| e.1)
                .collect_vec();
